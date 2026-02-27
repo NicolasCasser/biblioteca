@@ -3,6 +3,9 @@ import { BooksModule } from './modules/books/books.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostgresConfig } from './config/postgres.config';
+import { AuthModule } from './auth/auth.module';
+import { AuthController } from './auth/auth.controller';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -13,7 +16,9 @@ import { PostgresConfig } from './config/postgres.config';
       useClass: PostgresConfig,
     }),
     BooksModule,
+    AuthModule,
+    UserModule,
   ],
-  controllers: [],
+  controllers: [AuthController],
 })
 export class AppModule {}
