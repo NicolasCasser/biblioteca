@@ -14,14 +14,14 @@ export class PostgresConfig implements TypeOrmOptionsFactory {
       port: this.configService.get<number>('DB_PORT') ?? 5432,
       username: this.configService.get<string>('DB_USERNAME'),
       password: this.configService.get<string>('DB_PASSWORD'),
-      database: this.configService.get<string>('DB_DATABASE'),
+      database: this.configService.get<string>('DB_NAME'),
 
       // Entities and migrations
       autoLoadEntities: true,
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       migrations: [__dirname + '/../database/migrations/*{.ts,.js}'],
       migrationsTableName: 'migrations',
-      migrationsRun: false,
+      migrationsRun: true,
 
       // Synchronization and logging
       synchronize: false,
