@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    command: npm run start:dev
     container_name: library_api
     volumes:
       - .:/usr/src/app
