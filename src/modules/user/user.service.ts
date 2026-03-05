@@ -34,7 +34,9 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    return user;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...result } = user;
+    return result as User;
   }
 
   async update(id: string, update: Partial<CreateUserInput>): Promise<User> {
@@ -61,6 +63,16 @@ export class UserService {
   async delete(id: string): Promise<User> {
     const user = await this.get(id);
     await this.repository.remove(user);
+
+    return user;
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.repository.findOneBy({ email });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
 
     return user;
   }

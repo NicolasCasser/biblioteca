@@ -12,4 +12,4 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
   logger.log(`Application is running: http://localhost:${port}/api/docs`);
 }
-bootstrap();
+void bootstrap();

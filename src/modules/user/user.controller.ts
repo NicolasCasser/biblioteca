@@ -4,13 +4,15 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
-  Put,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserInput } from './dto/create-user.input';
 import { UserDTO } from './dto/user.dto';
 import { UpdateUserInput } from './dto/update-user.input';
+import { AuthGuard } from '../auth/jwt/auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -22,11 +24,13 @@ export class UserController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard)
   async get(@Param('id') id: string): Promise<UserDTO> {
     return this.userService.get(id);
   }
 
-  @Put(':id')
+  @Patch(':id')
+  @UseGuards(AuthGuard)
   async update(
     @Body() data: UpdateUserInput,
     @Param('id') id: string,
@@ -35,6 +39,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
   async delete(@Param('id') id: string): Promise<UserDTO> {
     return this.userService.delete(id);
   }
