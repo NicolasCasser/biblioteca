@@ -62,7 +62,7 @@ export class UserService {
 
   async delete(id: string): Promise<User> {
     const user = await this.get(id);
-    await this.repository.remove(user);
+    await this.repository.softRemove(user);
 
     return user;
   }
