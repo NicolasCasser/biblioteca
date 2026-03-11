@@ -1,9 +1,7 @@
-import { BaseDTO } from 'src/modules/bases/dto/base.dto';
+export abstract class UserDTO {
+  id!: string;
 
-export class UserDTO extends BaseDTO {
-  name!: string;
+  email!: string;
 
-  email?: string;
-
-  phone?: string;
+  password!: string;
 }

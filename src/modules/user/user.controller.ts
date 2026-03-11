@@ -1,6 +1,5 @@
 import {
   Body,
-  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -8,7 +7,6 @@ import {
   Patch,
   Post,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserInput } from './dto/create-user.input';
@@ -21,9 +19,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
-  @UseInterceptors(ClassSerializerInterceptor)
-  async create(@Body() data: CreateUserInput): Promise<UserDTO> {
+  create(@Body() data: CreateUserInput): Promise<UserDTO> {
     return this.userService.create(data);
   }
 

@@ -1,4 +1,3 @@
-import { Transform, TransformFnParams } from 'class-transformer';
 import {
   CreateDateColumn,
   DeleteDateColumn,
@@ -17,8 +16,5 @@ export abstract class BaseEntity {
   updatedAt?: Date;
 
   @DeleteDateColumn({ name: 'deleted_at' })
-  @Transform(({ value }: TransformFnParams): Date | undefined => {
-    return value ?? undefined;
-  }) // Se o campo for 'null', transforma em undefined para não retornar na resposta
   deletedAt?: Date;
 }

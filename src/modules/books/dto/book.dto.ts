@@ -1,6 +1,4 @@
-import { BaseDTO } from 'src/modules/bases/dto/base.dto';
-
-export abstract class BookDTO extends BaseDTO {
+export abstract class BookDTO {
   title!: string;
 
   author!: string;

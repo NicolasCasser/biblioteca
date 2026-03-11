@@ -1,11 +1,5 @@
-import { IsNotEmpty, IsString } from 'class-validator';
-
 export class AuthInput {
-  @IsString()
-  @IsNotEmpty()
-  name!: string;
+  email!: string;
 
-  @IsString()
-  @IsNotEmpty()
   password!: string;
 }
