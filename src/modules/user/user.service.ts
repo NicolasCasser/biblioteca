@@ -7,7 +7,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -17,14 +16,24 @@ export class UserService {
   ) {}
 
   async create(data: CreateUserInput): Promise<User> {
-    const hashPassword = await bcrypt.hash(data.password, 10);
-    const emailExists = await this.repository.findOneBy({ email: data.email });
+    const emailExists = await this.repository.findOneBy({
+      email: data.email,
+    });
 
     if (emailExists) {
       throw new ConflictException('Email already in use');
     }
 
-    return this.repository.save({ ...data, password: hashPassword });
+    const phoneExists = await this.repository.findOneBy({
+      phone: data.phone,
+    });
+
+    if (phoneExists) {
+      throw new ConflictException('Phone already in user');
+    }
+
+    const user = this.repository.create(data);
+    return this.repository.save(user);
   }
 
   async get(id: string): Promise<User> {
@@ -34,9 +43,7 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...result } = user;
-    return result as User;
+    return user;
   }
 
   async update(id: string, update: Partial<CreateUserInput>): Promise<User> {
@@ -52,10 +59,6 @@ export class UserService {
       }
     }
 
-    if (update.password) {
-      update.password = await bcrypt.hash(update.password, 10);
-    }
-
     Object.assign(user, update);
     return this.repository.save(user);
   }
@@ -63,16 +66,6 @@ export class UserService {
   async delete(id: string): Promise<User> {
     const user = await this.get(id);
     await this.repository.softRemove(user);
-
-    return user;
-  }
-
-  async findByEmail(email: string): Promise<User> {
-    const user = await this.repository.findOneBy({ email });
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
 
     return user;
   }

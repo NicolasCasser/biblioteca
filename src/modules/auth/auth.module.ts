@@ -4,6 +4,7 @@ import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from './jwt/auth.guard';
+import { AdminModule } from '../admin/admin.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { AuthGuard } from './jwt/auth.guard';
       signOptions: { expiresIn: '3600s' },
     }),
     forwardRef(() => UserModule),
+    AdminModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, AuthGuard],

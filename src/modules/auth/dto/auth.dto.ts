@@ -1,7 +1,5 @@
 export class AuthDTO {
-  email!: string;
+  name!: string;
 
-  name?: string;
-
-  id?: string;
+  password!: string;
 }
