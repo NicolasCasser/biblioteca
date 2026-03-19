@@ -9,6 +9,6 @@ export class Book extends BaseEntity {
   @Column()
   author!: string;
 
-  @Column({ default: true })
-  available!: boolean;
+  @Column()
+  genre!: string;
 }

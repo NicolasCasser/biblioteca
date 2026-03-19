@@ -17,14 +17,15 @@ export class UserService {
   ) {}
 
   async create(data: CreateUserInput): Promise<User> {
-    const hashPassword = await bcrypt.hash(data.password, 10);
+    data.password = await bcrypt.hash(data.password, 10);
     const emailExists = await this.repository.findOneBy({ email: data.email });
 
     if (emailExists) {
       throw new ConflictException('Email already in use');
     }
 
-    return this.repository.save({ ...data, password: hashPassword });
+    const user = this.repository.create(data);
+    return await this.repository.save(user);
   }
 
   async get(id: string): Promise<User> {

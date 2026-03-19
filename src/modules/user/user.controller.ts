@@ -12,7 +12,7 @@ import { UserService } from './user.service';
 import { CreateUserInput } from './dto/create-user.input';
 import { UserDTO } from './dto/user.dto';
 import { UpdateUserInput } from './dto/update-user.input';
-import { AuthGuard } from '../auth/jwt/auth.guard';
+import { AuthGuard } from '../auth/guards/auth.guard';
 
 @Controller('user')
 export class UserController {

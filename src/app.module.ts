@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostgresConfig } from './config/postgres.config';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { RentalsModule } from './modules/rentals/rentals.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -14,9 +16,11 @@ import { AuthModule } from './modules/auth/auth.module';
     TypeOrmModule.forRootAsync({
       useClass: PostgresConfig,
     }),
+    ScheduleModule.forRoot(),
     BooksModule,
     AuthModule,
     UserModule,
+    RentalsModule,
   ],
 })
 export class AppModule {}

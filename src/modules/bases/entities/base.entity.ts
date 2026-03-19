@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import {
   CreateDateColumn,
   DeleteDateColumn,
@@ -16,5 +17,7 @@ export abstract class BaseEntity {
   updatedAt?: Date;
 
   @DeleteDateColumn({ name: 'deleted_at' })
+  // Se o retorno for null, transforma em undefined e não retorna no JSON
+  @Transform(({ value }: { value: Date | null }) => value ?? undefined)
   deletedAt?: Date;
 }
