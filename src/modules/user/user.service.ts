@@ -40,6 +40,16 @@ export class UserService {
     return result as User;
   }
 
+  async getAll(): Promise<User[]> {
+    const users = await this.repository.find();
+
+    if (!users) {
+      throw new NotFoundException('Users not found');
+    }
+
+    return users;
+  }
+
   async update(id: string, update: Partial<CreateUserInput>): Promise<User> {
     const user = await this.get(id);
 

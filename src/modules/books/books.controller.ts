@@ -16,8 +16,10 @@ import { UpdateBookInput } from './dto/update-book.input';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { UserRole } from '../user/enum/userRole';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @UseGuards(AuthGuard, RolesGuard)
+@ApiBearerAuth('access-token')
 @Controller('books')
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}

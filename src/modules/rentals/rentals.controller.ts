@@ -16,8 +16,10 @@ import { Roles } from '../../common/decorators/roles.decorator';
 import { RentalDTO } from './dto/rental.dto';
 import { CurrentUser } from 'src/common/decorators/currentUser.decorator';
 import { AuthUser } from 'src/common/interfaces/authUser.interface';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @UseGuards(AuthGuard, RolesGuard)
+@ApiBearerAuth('access-token')
 @Controller('rentals')
 export class RentalsController {
   constructor(private readonly rentalsService: RentalsService) {}

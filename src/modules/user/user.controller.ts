@@ -13,7 +13,12 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UserDTO } from './dto/user.dto';
 import { UpdateUserInput } from './dto/update-user.input';
 import { AuthGuard } from '../auth/guards/auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { UserRole } from './enum/userRole';
+import { RolesGuard } from '../auth/guards/roles.guard';
 
+@ApiBearerAuth('access-token')
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
@@ -27,6 +32,13 @@ export class UserController {
   @UseGuards(AuthGuard)
   async get(@Param('id') id: string): Promise<UserDTO> {
     return this.userService.get(id);
+  }
+
+  @Get()
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  async getAll(): Promise<UserDTO[]> {
+    return this.userService.getAll();
   }
 
   @Patch(':id')
