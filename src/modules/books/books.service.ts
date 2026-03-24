@@ -16,14 +16,25 @@ export class BooksService {
     return await this.repository.save(book);
   }
 
-  async findAll(): Promise<Book[]> {
-    const books = await this.repository.find();
+  async findAll(
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<{ data: Book[]; total: number }> {
+    const skip = (page - 1) * limit;
 
-    if (!books || books.length === 0) {
+    const [books, total] = await this.repository.findAndCount({
+      take: limit,
+      skip: skip,
+    });
+
+    if (total === 0) {
       throw new NotFoundException('No books found');
     }
 
-    return books;
+    return {
+      data: books,
+      total,
+    };
   }
 
   async findOne(id: string): Promise<Book> {

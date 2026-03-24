@@ -6,6 +6,7 @@ import {
   Param,
   UseGuards,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { RentalsService } from './rentals.service';
 import { CreateRentalInput } from './dto/create-rental.input';
@@ -31,8 +32,11 @@ export class RentalsController {
 
   @Get()
   @Roles(UserRole.ADMIN)
-  findAll(): Promise<RentalDTO[]> {
-    return this.rentalsService.findAll();
+  findAll(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ): Promise<{ data: RentalDTO[]; total: number }> {
+    return this.rentalsService.findAll(page, limit);
   }
 
   @Get('my')

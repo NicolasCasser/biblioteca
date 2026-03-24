@@ -53,16 +53,26 @@ export class RentalsService {
     return this.repository.save(rental);
   }
 
-  async findAll(): Promise<Rental[]> {
-    const rentals = await this.repository.find({
+  async findAll(
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<{ data: Rental[]; total: number }> {
+    const skip = (page - 1) * limit;
+
+    const [rentals, total] = await this.repository.findAndCount({
       relations: ['user', 'book'],
+      take: limit, // Limite de itens por busca
+      skip: skip, // Pula os itens das páginas anteriores
     });
 
-    if (rentals.length === 0) {
-      throw new NotFoundException('Rentals not found');
+    if (total === 0) {
+      throw new NotFoundException('No rentals found');
     }
 
-    return rentals;
+    return {
+      data: rentals,
+      total,
+    };
   }
 
   async findMyRentals(user: AuthUser): Promise<Rental[]> {

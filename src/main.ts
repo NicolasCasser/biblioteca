@@ -45,5 +45,6 @@ async function bootstrap() {
   await app.listen(process.env.PORT ?? 3000);
 
   logger.log(`Application is running on: http://localhost:${port}`);
+  logger.log(`Documentation: http://localhost:${port}/api`);
 }
 void bootstrap();

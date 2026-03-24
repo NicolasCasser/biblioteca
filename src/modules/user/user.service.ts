@@ -40,14 +40,25 @@ export class UserService {
     return result as User;
   }
 
-  async getAll(): Promise<User[]> {
-    const users = await this.repository.find();
+  async getAll(
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<{ data: User[]; total: number }> {
+    const skip = (page - 1) * limit;
 
-    if (!users) {
+    const [users, total] = await this.repository.findAndCount({
+      take: limit,
+      skip: skip,
+    });
+
+    if (total === 0) {
       throw new NotFoundException('Users not found');
     }
 
-    return users;
+    return {
+      data: users,
+      total,
+    };
   }
 
   async update(id: string, update: Partial<CreateUserInput>): Promise<User> {
