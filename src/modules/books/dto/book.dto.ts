@@ -4,4 +4,8 @@ export abstract class BookDTO {
   author!: string;
 
   genre!: string;
+
+  totalQuantity!: number;
+
+  availableQuantity!: number;
 }

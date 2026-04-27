@@ -7,6 +7,7 @@ import {
   UseGuards,
   Patch,
   Query,
+  Req,
 } from '@nestjs/common';
 import { RentalsService } from './rentals.service';
 import { CreateRentalInput } from './dto/create-rental.input';
@@ -26,8 +27,8 @@ export class RentalsController {
   constructor(private readonly rentalsService: RentalsService) {}
 
   @Post()
-  create(@Body() data: CreateRentalInput) {
-    return this.rentalsService.create(data);
+  create(@Body() data: CreateRentalInput, @CurrentUser() user: AuthUser) {
+    return this.rentalsService.create(data, user.sub);
   }
 
   @Get()

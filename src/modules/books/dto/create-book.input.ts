@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsPositive, IsString } from 'class-validator';
 
 export class CreateBookInput {
   @IsString()
@@ -12,4 +12,8 @@ export class CreateBookInput {
   @IsString()
   @IsNotEmpty({ message: 'genre is required' })
   genre!: string;
+
+  @IsNumber()
+  @IsNotEmpty({ message: 'total quantity is required'})
+  totalQuantity!: number;
 }

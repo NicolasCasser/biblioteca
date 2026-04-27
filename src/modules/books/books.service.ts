@@ -13,6 +13,9 @@ export class BooksService {
 
   async create(data: CreateBookInput) {
     const book = this.repository.create(data);
+
+    book.availableQuantity = book.totalQuantity;
+
     return await this.repository.save(book);
   }
 

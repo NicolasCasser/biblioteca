@@ -20,19 +20,19 @@ export class Rental extends BaseEntity {
   @Column({ name: 'book_id', type: 'uuid', nullable: false })
   bookId!: string;
 
-  @Column({ type: 'timestamp' })
+  @Column({ name: 'reserved_at', type: 'timestamp' })
   reservedAt!: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ name: 'pickup_deadline', type: 'timestamp', nullable: true })
   pickupDeadline!: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ name: 'picked_up_at', type: 'timestamp', nullable: true })
   pickedUpAt!: Date | null;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ name: 'due_date', type: 'timestamp', nullable: true })
   dueDate!: Date | null;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ name: 'returned_at', type: 'timestamp', nullable: true })
   returnedAt!: Date | null;
 
   @Column({ type: 'enum', enum: RentalStatus, default: RentalStatus.RESERVED })

@@ -9,18 +9,21 @@ import { Rental } from './entities/rental.entity';
 import { In, LessThan, Repository } from 'typeorm';
 import { RentalStatus } from './enum/status.enum';
 import { AuthUser } from 'src/common/interfaces/authUser.interface';
+import { Book } from '../books/entities/book.entity';
 
 @Injectable()
 export class RentalsService {
   constructor(
     @InjectRepository(Rental)
     private readonly repository: Repository<Rental>,
+    @InjectRepository(Book)
+    private readonly bookRepository: Repository<Book>,
   ) {}
 
-  async create(data: CreateRentalInput): Promise<Rental> {
+  async create(data: CreateRentalInput, userId: string): Promise<Rental> {
     const activeRentals = await this.repository.count({
       where: {
-        book: { id: data.bookId },
+        userId: userId,
         status: In([RentalStatus.RESERVED, RentalStatus.BORROWED]),
       },
     });
@@ -31,26 +34,30 @@ export class RentalsService {
       );
     }
 
-    const activeRental = await this.repository.findOne({
-      where: {
-        book: { id: data.bookId },
-        status: In([RentalStatus.RESERVED, RentalStatus.BORROWED]),
-      },
+    const book = await this.bookRepository.findOne({
+      where: { id: data.bookId },
     });
 
-    if (activeRental) {
-      throw new BadRequestException('Book is not available');
+    if (!book) {
+      throw new NotFoundException('Book not found');
+    }
+
+    if (book.availableQuantity === 0) {
+      throw new BadRequestException('Book is out of stock');
     }
 
     const rental = this.repository.create({
-      user: { id: data.userId },
+      userId: userId,
       book: { id: data.bookId },
       reservedAt: new Date(),
       pickupDeadline: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 dias
       status: RentalStatus.RESERVED,
     });
 
-    return this.repository.save(rental);
+    book.availableQuantity -= 1;
+
+    await this.bookRepository.save(book);
+    return await this.repository.save(rental);
   }
 
   async findAll(
