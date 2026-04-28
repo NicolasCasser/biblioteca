@@ -165,7 +165,9 @@ export class RentalsService {
 
     rental.status = RentalStatus.RETURNED;
     rental.returnedAt = new Date();
-
+    rental.book.availableQuantity += 1;
+    
+    await this.bookRepository.save(rental.book);
     return this.repository.save(rental);
   }
 
